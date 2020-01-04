@@ -8,8 +8,7 @@ router.get('/login', function (req, res) {
 });
 router.post('/login', function (req, res) {
     var _a = req.body, email = _a.email, password = _a.password;
-    res.send({
-        email: email,
-        password: password
-    });
+    if (email && password) {
+        res.send({ email: email, password: password });
+    }
 });
