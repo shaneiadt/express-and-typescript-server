@@ -8,7 +8,23 @@ router.get('/login', function (req, res) {
 });
 router.post('/login', function (req, res) {
     var _a = req.body, email = _a.email, password = _a.password;
-    if (email && password) {
-        res.send({ email: email, password: password });
+    if (email && password && email === 'test@test.com' && password === 'password') {
+        req.session = { loggedIn: true };
+        res.redirect('/');
     }
+    else {
+        res.send("Invalid email or password");
+    }
+});
+router.get('/', function (req, res) {
+    if (req.session && req.session.loggedIn) {
+        res.send("\n      <div>\n        <div>You're logged in!</div>\n        <a href=\"/logout\">Logout</a>\n      </div>\n    ");
+    }
+    else {
+        res.send("\n      <div>\n      <div>You're <strong>NOT</strong> logged in!</div>\n        <a href=\"/login\">Login</a>\n      </div>\n      ");
+    }
+});
+router.get('/logout', function (req, res) {
+    req.session = undefined;
+    res.redirect('/');
 });
