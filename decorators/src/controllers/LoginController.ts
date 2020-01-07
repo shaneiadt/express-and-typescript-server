@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { get, controller, use } from './decorators';
 
-function testMiddlware(req: Request, res: Response, next: NextFunction) {
+function logger(req: Request, res: Response, next: NextFunction) {
   console.log('TEST MIDDLEWARE');
   next();
 }
@@ -9,7 +9,7 @@ function testMiddlware(req: Request, res: Response, next: NextFunction) {
 @controller('/auth')
 class LoginController {
   @get('/login')
-  @use(testMiddlware)
+  @use(logger)
   getLogin(req: Request, res: Response): void {
     res.send(`
       <div>
