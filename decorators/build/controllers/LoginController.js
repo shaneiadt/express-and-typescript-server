@@ -10,6 +10,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var decorators_1 = require("./decorators");
+function requireAuth(req, res, next) {
+    if (req.session && req.session.loggedIn) {
+        next();
+        return;
+    }
+    res.status(403);
+    res.send('Not permitted');
+}
 var LoginController = /** @class */ (function () {
     function LoginController() {
     }
@@ -26,6 +34,13 @@ var LoginController = /** @class */ (function () {
             res.send("Invalid email or password");
         }
     };
+    LoginController.prototype.getLogout = function (req, res) {
+        req.session = undefined;
+        res.redirect('/');
+    };
+    LoginController.prototype.getProtected = function (req, res) {
+        res.send('Welcome to protected route, logged in user.');
+    };
     __decorate([
         decorators_1.get('/login'),
         __metadata("design:type", Function),
@@ -39,6 +54,19 @@ var LoginController = /** @class */ (function () {
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], LoginController.prototype, "postLogin", null);
+    __decorate([
+        decorators_1.get('/logout'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", void 0)
+    ], LoginController.prototype, "getLogout", null);
+    __decorate([
+        decorators_1.get('/protected'),
+        decorators_1.use(requireAuth),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", void 0)
+    ], LoginController.prototype, "getProtected", null);
     LoginController = __decorate([
         decorators_1.controller('/auth')
     ], LoginController);
