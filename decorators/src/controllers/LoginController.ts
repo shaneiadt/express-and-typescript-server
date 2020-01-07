@@ -1,15 +1,9 @@
-import { Request, Response, NextFunction } from 'express';
-import { get, controller, use } from './decorators';
-
-function logger(req: Request, res: Response, next: NextFunction) {
-  console.log('TEST MIDDLEWARE');
-  next();
-}
+import { Request, Response } from 'express';
+import { get, controller } from './decorators';
 
 @controller('/auth')
 class LoginController {
   @get('/login')
-  @use(logger)
   getLogin(req: Request, res: Response): void {
     res.send(`
       <div>
